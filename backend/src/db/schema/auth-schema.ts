@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { comments, products } from "./app.js";
 
 const timestamps = {
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -60,6 +61,8 @@ export const verification = pgTable("verification", {
 );
 
 export const userRelations = relations(user, ({ many }) => ({
+  products: many(products),
+  comments: many(comments),
   sessions: many(session),
   accounts: many(account),
 }));
@@ -77,3 +80,15 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export type User = typeof user.$inferSelect;
+export type NewUser = typeof user.$inferInsert;
+
+export type Session = typeof session.$inferSelect;
+export type NewSession = typeof session.$inferInsert;
+
+export type Account = typeof account.$inferSelect;
+export type NewAccount = typeof account.$inferInsert;
+
+export type Verification = typeof verification.$inferSelect;
+export type NewVerification = typeof verification.$inferInsert;
