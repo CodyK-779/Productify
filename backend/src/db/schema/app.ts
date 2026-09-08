@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { user } from "./auth-schema.js";
 
@@ -14,7 +14,9 @@ export const products = pgTable("products", {
   image: text("image").notNull(),
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   ...timestamps
-});
+}, (table) => [
+  index("products_userId_idx").on(table.userId)
+]);
 
 export const comments = pgTable("comments", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -22,7 +24,10 @@ export const comments = pgTable("comments", {
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   productId: uuid("product_id").notNull().references(() => products.id, { onDelete: "cascade" }),
   ...timestamps
-});
+}, (table) => [
+  index("comments_userId_idx").on(table.userId),
+  index("comments_productId_idx").on(table.productId)
+]);
 
 export const productRelations = relations(products, ({ one, many }) => ({
   user: one(user, {
