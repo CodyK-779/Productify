@@ -32,8 +32,16 @@ export const userController = {
 
       const updateData: Partial<User> = {};
 
-      if (name !== undefined) updateData.name = name.trim();
-      if (email !== undefined) updateData.email = email.trim();
+      if (name !== undefined) {
+        if (typeof name !== "string") return res.status(400).json({ error: "Invalid name" });
+      }
+      updateData.name = name.trim();
+
+      if (email !== undefined) {
+        if (typeof email !== "string") return res.status(400).json({ error: "Invalid email" });
+      }
+      updateData.email = email.trim();
+
       if (image !== undefined) updateData.image = image;
       if (imgPublicId !== undefined) updateData.imgPublicId = imgPublicId;
 
