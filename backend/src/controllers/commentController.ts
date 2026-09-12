@@ -2,8 +2,16 @@ import { Request, Response } from "express";
 import { auth } from "../lib/auth.js";
 import { fromNodeHeaders } from "better-auth/node";
 import { db } from "../db/db.js";
-import { comments } from "../db/schema/app.js";
+import { comments, products } from "../db/schema/app.js";
 import { and, eq } from "drizzle-orm";
+
+const isProductForeignKeyViolation = (error: unknown) => {
+  if (typeof error !== "object" || error === null) return false;
+
+  const databaseError = error as { code?: string; constraint?: string };
+  return databaseError.code === "23503"
+    && databaseError.constraint === "comments_product_id_products_id_fk";
+};
 
 export const commentController = {
   createComment: async (req: Request, res: Response) => {
@@ -18,7 +26,23 @@ export const commentController = {
 
       if (!content || !productId) return res.status(400).json({ error: "Missing fields" });
 
-      const [newComment] = await db.insert(comments).values({ content, productId, userId: session.user.id }).returning();
+      const product = await db.query.products.findFirst({
+        columns: { id: true },
+        where: eq(products.id, productId)
+      });
+
+      if (!product) return res.status(404).json({ error: "Product not found" });
+
+      let newComment;
+      try {
+        [newComment] = await db.insert(comments).values({ content, productId, userId: session.user.id }).returning();
+      } catch (error) {
+        if (isProductForeignKeyViolation(error)) {
+          return res.status(404).json({ error: "Product not found" });
+        }
+
+        throw error;
+      }
 
       res.status(201).json(newComment);
     } catch (error) {
