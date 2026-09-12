@@ -12,6 +12,7 @@ export const products = pgTable("products", {
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
+  imageId: text("image_id").notNull(),
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   ...timestamps
 }, (table) => [
