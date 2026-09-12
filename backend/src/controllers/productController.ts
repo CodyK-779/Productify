@@ -102,8 +102,14 @@ export const productController = {
       const { title, description, image, imageId } = req.body;
 
       const updateData: Partial<Product> = {};
-      if (title !== undefined) updateData.title = title.trim();
-      if (description !== undefined) updateData.description = description.trim();
+      if (title !== undefined) {
+        if (typeof title !== "string") return res.status(400).json({ error: "Title must be a string" });
+        updateData.title = title.trim();
+      }
+      if (description !== undefined) {
+        if (typeof description !== "string") return res.status(400).json({ error: "Description must be a string" });
+        updateData.description = description.trim();
+      }
       if (image !== undefined) updateData.image = image;
       if (imageId !== undefined) updateData.imageId = imageId;
 
