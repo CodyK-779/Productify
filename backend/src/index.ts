@@ -2,6 +2,9 @@ import express from "express";
 import { ENV } from "./config/env.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
+import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 import cors from "cors";
 
 const app = express();
@@ -25,6 +28,10 @@ app.get("/", (req, res) => {
       comments: "/api/comments"
     }
   })
-})
+});
 
-app.listen(ENV.PORT, () => console.log(`Server is running on http://localhost:${ENV.PORT}`))
+app.use("/api/users", userRoutes)
+app.use("/api/products", productRoutes)
+app.use("/api/comments", commentRoutes)
+
+app.listen(ENV.PORT, () => console.log(`Server is running on http://localhost:${ENV.PORT}`));
