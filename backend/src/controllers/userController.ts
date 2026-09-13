@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import type { Request, Response } from "express"
 import { db } from "../db/db.js";
 import { User, user } from "../db/schema/auth-schema.js";
 import { eq } from "drizzle-orm";
