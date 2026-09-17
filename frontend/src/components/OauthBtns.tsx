@@ -21,7 +21,6 @@ const OauthBtns = ({ provider, method }: Props) => {
         callbackURL: "http://localhost:5173",
         fetchOptions: {
           onRequest: () => setLoading(true),
-          onResponse: () => setLoading(false),
           onError: (cxt) => {
             console.error("Full error context:", cxt);
             console.error("Error object:", cxt.error);
@@ -40,6 +39,8 @@ const OauthBtns = ({ provider, method }: Props) => {
         description: "Failed to initiate sign in",
         priority: "high",
       });
+    } finally {
+      setLoading(false);
     }
   };
 

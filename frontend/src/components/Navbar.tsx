@@ -3,19 +3,33 @@ import { PlusIcon, ShoppingBagIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router";
 import ThemeSelector from "./ThemeSelector";
 import { Img } from "@page-speed/img";
+import { useState } from "react";
+import { toast } from "./ui/toast";
 
 const Navbar = () => {
   const { data: session, isPending } = useSession();
+  const [loading, setLoading] = useState(false);
 
   if (isPending) return null;
 
   const handleSignout = async () => {
-    const { error } = await authClient.signOut();
-    if (error) {
-      console.error("Sign out failed:", error);
-      return;
+    setLoading(true);
+
+    try {
+      const { error } = await authClient.signOut();
+      if (error) {
+        console.error("Sign out failed:", error);
+        return;
+      }
+      toast.add({
+        type: "success",
+        description: "User signed out successfully",
+      });
+    } catch (error) {
+      toast.add({ type: "error", description: "Failed to Sign out user." });
+    } finally {
+      setLoading(false);
     }
-    console.log("signed out");
   };
 
   return (
@@ -56,17 +70,21 @@ const Navbar = () => {
                   </p>
                 )}
               </div>
-              <button className="btn btn-ghost btn-sm" onClick={handleSignout}>
+              <button
+                onClick={handleSignout}
+                className="btn btn-ghost btn-sm"
+                disabled={loading}
+              >
                 Sign Out
               </button>
             </>
           ) : (
             <>
-              <Link to="/login">
-                <button className="btn btn-ghost btn-sm">Sign In</button>
+              <Link to="/login" className="btn btn-ghost btn-sm">
+                Sign In
               </Link>
-              <Link to="/signup">
-                <button className="btn btn-primary btn-sm">Get Started</button>
+              <Link to="/signup" className="btn btn-primary btn-sm">
+                Get Started
               </Link>
             </>
           )}
