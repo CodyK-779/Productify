@@ -5,7 +5,6 @@ export const formSchema = z.object({
   email: z.string().trim().toLowerCase().email("Invalid Email"),
   password: z
     .string()
-    .trim()
     .min(8, "Password must be at least 8 characters.")
     .max(50, "Password can't exceed 50 characters")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
@@ -19,7 +18,6 @@ export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Invalid Email"),
   password: z
     .string()
-    .trim()
     .min(8, "Password must be at least 8 characters.")
     .max(50, "Password can't exceed 50 characters")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter.")

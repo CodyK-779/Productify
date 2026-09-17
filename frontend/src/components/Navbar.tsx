@@ -19,6 +19,7 @@ const Navbar = () => {
       const { error } = await authClient.signOut();
       if (error) {
         console.error("Sign out failed:", error);
+        toast.add({ type: "error", description: "Failed to sign out user." });
         return;
       }
       toast.add({
