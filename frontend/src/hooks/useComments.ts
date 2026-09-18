@@ -7,7 +7,7 @@ export const useCreateComment = () => {
   return useMutation({
     mutationFn: createComment,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({queryKey: ["products", variables.productId]})
+      queryClient.invalidateQueries({queryKey: ["product", variables.productId]})
     }
   })
 };
