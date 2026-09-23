@@ -1,37 +1,14 @@
-import { authClient, useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 import { PlusIcon, ShoppingBagIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router";
 import ThemeSelector from "./ThemeSelector";
 import { Img } from "@page-speed/img";
-import { useState } from "react";
-import { toast } from "./ui/toast";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = () => {
   const { data: session, isPending } = useSession();
-  const [loading, setLoading] = useState(false);
 
   if (isPending) return null;
-
-  const handleSignout = async () => {
-    setLoading(true);
-
-    try {
-      const { error } = await authClient.signOut();
-      if (error) {
-        console.error("Sign out failed:", error);
-        toast.add({ type: "error", description: "Failed to sign out user." });
-        return;
-      }
-      toast.add({
-        type: "success",
-        description: "User signed out successfully",
-      });
-    } catch (error) {
-      toast.add({ type: "error", description: "Failed to Sign out user." });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="navbar bg-base-300">
@@ -58,26 +35,21 @@ const Navbar = () => {
                 <UserIcon className="size-4" />
                 <span className="hidden sm:inline">Profile</span>
               </Link>
-              <div className="size-8.5 rounded-full overflow-hidden flex items-center justify-center bg-[#1DB954]">
-                {session.user.image ? (
-                  <Img
-                    src={session.user.image}
-                    alt="User image"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                ) : (
-                  <p className="font-bold text-black">
-                    {session.user.name.charAt(0).toUpperCase()}
-                  </p>
-                )}
-              </div>
-              <button
-                onClick={handleSignout}
-                className="btn btn-ghost btn-sm"
-                disabled={loading}
-              >
-                Sign Out
-              </button>
+              <ProfileDropdown>
+                <div className="size-8.5 rounded-full overflow-hidden flex items-center justify-center bg-[#1DB954] cursor-pointer">
+                  {session.user.image ? (
+                    <Img
+                      src={session.user.image}
+                      alt="User image"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <p className="font-bold text-black">
+                      {session.user.name.charAt(0).toUpperCase()}
+                    </p>
+                  )}
+                </div>
+              </ProfileDropdown>
             </>
           ) : (
             <>

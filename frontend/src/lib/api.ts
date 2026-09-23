@@ -18,7 +18,12 @@ export const getMyProducts = async (): Promise<MyProducts[]> => {
 };
 
 export const createProduct = async (productData: ProductInput): Promise<Product> => {
-  const { data } = await api.post<Product>("/products", productData);
+  const formData = new FormData();
+  formData.append("title", productData.title);
+  formData.append("description", productData.description);
+  formData.append("product_image", productData.file);
+
+  const { data } = await api.post<Product>("/products", formData);
   return data;
 };
 

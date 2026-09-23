@@ -58,8 +58,7 @@ export interface ProductDetails extends MyProducts {
 export type ProductInput = {
   title: string;
   description: string;
-  image: string;
-  imageId: string;
+  file: File;
 };
 
 export type CommentInput = {
