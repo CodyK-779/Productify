@@ -22,6 +22,7 @@ export const useGetMyProducts = () => {
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
@@ -49,9 +50,9 @@ export const useUpdateProduct = () => {
 
   return useMutation({
     mutationFn: ({id, ...productData}: { id: string } & Partial<ProductInput>) => updateProduct(id, productData),
-    onSuccess: (_, variables) => {
+    onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      queryClient.invalidateQueries({ queryKey: ["product", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
       queryClient.invalidateQueries({ queryKey: ["myProducts"] });
     },
   });

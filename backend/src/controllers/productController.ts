@@ -4,6 +4,7 @@ import { Product, products } from "../db/schema/app.js";
 import { and, eq } from "drizzle-orm";
 import { auth } from "../lib/auth.js";
 import { fromNodeHeaders } from "better-auth/node";
+import { uploadProductImage } from "../lib/img-upload.js";
 
 export const productController = {
   getAllProducts: async (req: Request, res: Response) => {
@@ -73,13 +74,16 @@ export const productController = {
 
       if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-      const { title, description, image, imageId } = req.body;
+      const { title, description } = req.body;
+      const file = req.file;
 
-      if (!title || !description || !image || !imageId) {
+      if (!title || !description || !file) {
         return res.status(400).json({ error: "Title, description, image,  and imageId are required" });
       }
 
-      const newProductData = { title, description, image, imageId, userId: session.user.id }
+      const result = await uploadProductImage(file);
+
+      const newProductData = { title, description, image: result.secure_url, imageId: result.public_id, userId: session.user.id }
 
       const [newProduct] = await db.insert(products).values(newProductData).returning();
       
