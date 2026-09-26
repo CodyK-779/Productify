@@ -5,22 +5,27 @@ import { cn } from "cn"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
+/** Provides the dialog's state and context using the Base UI root props. */
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
 
+/** Renders a trigger that opens the associated dialog. */
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
+/** Renders dialog elements in a portal using the Base UI portal props. */
 function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 }
 
+/** Renders a control that closes the associated dialog. */
 function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
+/** Renders the styled dialog backdrop with optional additional classes. */
 function DialogOverlay({
   className,
   ...props
@@ -37,6 +42,10 @@ function DialogOverlay({
   )
 }
 
+/**
+ * Renders a centered dialog popup with a portal and backdrop.
+ * Includes a close button unless showCloseButton is false.
+ */
 function DialogContent({
   className,
   children,
@@ -78,6 +87,7 @@ function DialogContent({
   )
 }
 
+/** Groups dialog heading content in a styled vertical layout. */
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -88,6 +98,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+/**
+ * Renders the dialog's action area with a responsive layout.
+ * Adds a Close button when showCloseButton is true.
+ */
 function DialogFooter({
   className,
   showCloseButton = false,
@@ -115,6 +129,7 @@ function DialogFooter({
   )
 }
 
+/** Renders a styled title associated with the dialog for accessibility. */
 function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
@@ -128,6 +143,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   )
 }
 
+/** Renders styled descriptive text associated with the dialog for accessibility. */
 function DialogDescription({
   className,
   ...props
