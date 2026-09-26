@@ -13,11 +13,11 @@ import {
 } from "./ui/alert-dialog";
 import { useNavigate } from "react-router";
 import { toast } from "./ui/toast";
-import type { ReactNode } from "react";
+import type { ReactElement } from "react";
 
 interface Props {
   productId: string;
-  children: ReactNode;
+  children: ReactElement;
   path: string;
 }
 
@@ -46,7 +46,7 @@ const DeleteProductWrapper = ({ productId, children, path }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>{children}</AlertDialogTrigger>
+      <AlertDialogTrigger render={children} />
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete confirmation</AlertDialogTitle>

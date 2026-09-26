@@ -38,10 +38,10 @@ const DeleteComment = ({ commentId, productId }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <button className="btn btn-ghost btn-xs text-error">
-          <Trash2Icon className="size-3" />
-        </button>
+      <AlertDialogTrigger
+        render={<button className="btn btn-ghost btn-xs text-error" aria-label="Delete comment" />}
+      >
+        <Trash2Icon className="size-3" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

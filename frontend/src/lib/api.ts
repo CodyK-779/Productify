@@ -31,7 +31,7 @@ export const updateProduct = async (id: string, productData: Partial<ProductInpu
   const formData = new FormData();
   if (productData.title) formData.append("title", productData.title);
   if (productData.description) formData.append("description", productData.description);
-  if (productData.file) formData.append("file", productData.file);
+  if (productData.file) formData.append("product_image", productData.file);
 
   const { data } = await api.put<Product>(`/products/${id}`, formData);
   return data;
