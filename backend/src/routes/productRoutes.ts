@@ -13,7 +13,7 @@ router.get("/:id", productController.getProductById);
 
 router.post("/", requireAuth, upload.single("product_image"), productController.createProduct);
 
-router.put("/:id", requireAuth, productController.updateProduct);
+router.put("/:id", requireAuth, upload.single("product_image"), productController.updateProduct);
 
 router.delete("/:id", requireAuth, productController.deleteProduct);
 

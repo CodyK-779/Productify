@@ -4,7 +4,7 @@ import { Product, products } from "../db/schema/app.js";
 import { and, eq } from "drizzle-orm";
 import { auth } from "../lib/auth.js";
 import { fromNodeHeaders } from "better-auth/node";
-import { uploadProductImage } from "../lib/img-upload.js";
+import { deleteProductImage, uploadProductImage } from "../lib/img-upload.js";
 
 export const productController = {
   getAllProducts: async (req: Request, res: Response) => {
@@ -119,6 +119,12 @@ export const productController = {
       if (image !== undefined) updateData.image = image;
       if (imageId !== undefined) updateData.imageId = imageId;
 
+      if (req.file) {
+        const result = await uploadProductImage(req.file);
+        updateData.image = result.secure_url;
+        updateData.imageId = result.public_id;
+      }
+
       if (Object.keys(updateData).length === 0) return res.status(400).json({ error: "No fields to update" });
 
       const [updatedProduct] = await db.update(products).set(updateData).where(
@@ -154,6 +160,8 @@ export const productController = {
       ).returning();
 
       if (!deletedProduct) return res.status(404).json({ error: "Product not found or unauthorized" });
+
+      deleteProductImage(deletedProduct.imageId).catch(err => console.warn("Failed to delete cloudinary image:", err));
 
       res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {

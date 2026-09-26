@@ -28,7 +28,12 @@ export const createProduct = async (productData: ProductInput): Promise<Product>
 };
 
 export const updateProduct = async (id: string, productData: Partial<ProductInput>): Promise<Product> => {
-  const { data } = await api.put<Product>(`/products/${id}`, productData);
+  const formData = new FormData();
+  if (productData.title) formData.append("title", productData.title);
+  if (productData.description) formData.append("description", productData.description);
+  if (productData.file) formData.append("product_image", productData.file);
+
+  const { data } = await api.put<Product>(`/products/${id}`, formData);
   return data;
 };
 
@@ -39,7 +44,7 @@ export const deleteProduct = async (id: string): Promise<{ message: string }> =>
 
 // Comments API
 export const createComment = async ({ content, productId }: CommentInput): Promise<Comment> => {
-  const { data } = await api.post<Comment>(`/comments/${productId}`, { content });
+  const { data } = await api.post<Comment>(`/comments/${productId}`, { content, productId });
   return data;
 };
 
