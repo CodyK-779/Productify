@@ -36,7 +36,7 @@ const Navbar = () => {
                 <span className="hidden sm:inline">Profile</span>
               </Link>
               <ProfileDropdown>
-                <div className="size-8.5 rounded-full overflow-hidden flex items-center justify-center bg-[#1DB954] cursor-pointer">
+                <div className="size-8.5 rounded-full overflow-hidden flex items-center justify-center bg-primary cursor-pointer">
                   {session.user.image ? (
                     <Img
                       src={session.user.image}

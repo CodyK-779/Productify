@@ -1,3 +1,5 @@
+import type { StripEmptyObjects } from "better-auth/react";
+
 export type User = {
   id: string;
   name: string;
@@ -65,3 +67,25 @@ export type CommentInput = {
   content: string;
   productId: string;
 };
+
+export type Session = {
+  user: StripEmptyObjects<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    image?: string | null | undefined;
+  }>;
+  session: StripEmptyObjects<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    expiresAt: Date;
+    token: string;
+    ipAddress?: string | null | undefined;
+    userAgent?: string | null | undefined;
+  }>;
+} | null

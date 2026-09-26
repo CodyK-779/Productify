@@ -4,7 +4,7 @@ import { Product, products } from "../db/schema/app.js";
 import { and, eq } from "drizzle-orm";
 import { auth } from "../lib/auth.js";
 import { fromNodeHeaders } from "better-auth/node";
-import { uploadProductImage } from "../lib/img-upload.js";
+import { deleteProductImage, uploadProductImage } from "../lib/img-upload.js";
 
 export const productController = {
   getAllProducts: async (req: Request, res: Response) => {
@@ -154,6 +154,8 @@ export const productController = {
       ).returning();
 
       if (!deletedProduct) return res.status(404).json({ error: "Product not found or unauthorized" });
+
+      deleteProductImage(deletedProduct.imageId).catch(err => console.warn("Failed to delete cloudinary image:", err));
 
       res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {

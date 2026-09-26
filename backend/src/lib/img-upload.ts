@@ -37,3 +37,14 @@ export async function uploadProductImage(file: Express.Multer.File): Promise<Clo
     throw new Error(error instanceof Error ? error.message : "Failed to upload image");
   }
 }
+
+export async function deleteProductImage(publicId: string) {
+  try {
+    if (!publicId) throw new Error("No publicId provided");
+
+    await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
+  } catch (error) {
+    console.error(error);
+    throw new Error(error instanceof Error ? error.message : "Failed to delete cloudinary image")
+  }
+}

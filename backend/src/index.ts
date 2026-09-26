@@ -9,6 +9,7 @@ import cors from "cors";
 
 const app = express();
 
+app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -16,8 +17,6 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
-
-app.all('/api/auth/*splat', toNodeHandler(auth));
 
 app.get("/", (req, res) => {
   res.json({
