@@ -10,12 +10,10 @@ import {
 } from "lucide-react";
 import DeleteProductWrapper from "@/components/DeleteProductWrapper";
 import { Img } from "@page-speed/img";
-import { useState } from "react";
 import EditProduct from "@/components/EditProduct";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const [showDialog, setShowDialog] = useState(false);
   const { data: products, isPending } = useGetMyProducts();
 
   if (isPending) return <LoadingSpinner />;
@@ -68,17 +66,11 @@ const ProfilePage = () => {
                   >
                     <EyeIcon className="size-3" /> View
                   </button>
-                  <button
-                    onClick={() => setShowDialog(true)}
-                    className="btn btn-ghost btn-xs gap-1"
-                  >
-                    <EditIcon className="size-3" /> Edit
-                  </button>
-                  <EditProduct
-                    open={showDialog}
-                    setOpen={setShowDialog}
-                    product={product}
-                  />
+                  <EditProduct product={product}>
+                    <button className="btn btn-ghost btn-xs gap-1">
+                      <EditIcon className="size-3" /> Edit
+                    </button>
+                  </EditProduct>
                   <DeleteProductWrapper productId={product.id} path="/profile">
                     <button className="btn btn-ghost btn-xs text-error gap-1">
                       <Trash2Icon className="size-3" /> Delete

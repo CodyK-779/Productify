@@ -12,13 +12,11 @@ import {
   Trash2Icon,
   UserIcon,
 } from "lucide-react";
-import { useState } from "react";
 import { useParams, Link } from "react-router";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const { data: session } = useSession();
-  const [openDialog, setOpenDialog] = useState(false);
 
   const { data: product, error, isPending } = useGetProductById(id!);
 
@@ -47,17 +45,11 @@ const ProductDetailsPage = () => {
         </Link>
         {isOwner && (
           <div className="flex gap-2">
-            <button
-              className="btn btn-ghost btn-sm gap-1"
-              onClick={() => setOpenDialog(true)}
-            >
-              <EditIcon className="size-4" /> Edit
-            </button>
-            <EditProduct
-              open={openDialog}
-              setOpen={setOpenDialog}
-              product={product}
-            />
+            <EditProduct product={product}>
+              <button className="btn btn-ghost btn-sm gap-1">
+                <EditIcon className="size-4" /> Edit
+              </button>
+            </EditProduct>
 
             <DeleteProduct productId={product.id} path="/">
               <button className="btn btn-error btn-sm gap-1">

@@ -1,5 +1,5 @@
-import type { ProductDetails } from "@/types";
-import { useEffect, useState } from "react";
+import type { MyProducts } from "@/types";
+import { useEffect, useState, type ReactElement } from "react";
 import {
   Dialog,
   DialogClose,
@@ -19,9 +19,8 @@ import EditImage from "./EditImage";
 import { toast } from "./ui/toast";
 
 interface Props {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  product: ProductDetails;
+  product: MyProducts;
+  children: ReactElement;
 }
 
 export interface EditProductImage {
@@ -30,7 +29,8 @@ export interface EditProductImage {
   originalUrl: string;
 }
 
-const EditProduct = ({ open, setOpen, product }: Props) => {
+const EditProduct = ({ product, children }: Props) => {
+  const [showDialog, setShowDialog] = useState(false);
   const { mutate, isPending } = useUpdateProduct();
 
   const [editProduct, setEditProduct] = useState({
@@ -78,7 +78,7 @@ const EditProduct = ({ open, setOpen, product }: Props) => {
       { id: product.id, ...updateData },
       {
         onSuccess: () => {
-          setOpen(false);
+          setShowDialog(false);
           toast.add({
             type: "success",
             description: "Product updated successfully!",
@@ -111,74 +111,81 @@ const EditProduct = ({ open, setOpen, product }: Props) => {
     editImage.file === null;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="text-white" onClose={handleClose}>
-        <DialogHeader>
-          <DialogTitle>Edit Product</DialogTitle>
-          <DialogDescription>
-            Make changes to this product here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
-        <FieldGroup>
-          <Field>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              name="title"
-              value={editProduct.title}
-              onChange={(e) =>
-                setEditProduct({ ...editProduct, title: e.target.value })
-              }
-              placeholder="Enter product title"
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              name="description"
-              value={editProduct.description}
-              onChange={(e) =>
-                setEditProduct({ ...editProduct, description: e.target.value })
-              }
-              placeholder="Enter product description"
-            />
-          </Field>
-        </FieldGroup>
-        <EditImage
-          editImage={editImage}
-          setEditImage={setEditImage}
-          isPending={isPending}
-        />
-        <DialogFooter>
-          <DialogClose
-            render={
-              <Button
-                variant="outline"
-                onClick={handleClose}
-                className="cursor-pointer"
-              >
-                Cancel
-              </Button>
-            }
+    <>
+      <div onClick={() => setShowDialog(true)}>{children}</div>
+
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="text-white" onClose={handleClose}>
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+            <DialogDescription>
+              Make changes to this product here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                value={editProduct.title}
+                onChange={(e) =>
+                  setEditProduct({ ...editProduct, title: e.target.value })
+                }
+                placeholder="Enter product title"
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                name="description"
+                value={editProduct.description}
+                onChange={(e) =>
+                  setEditProduct({
+                    ...editProduct,
+                    description: e.target.value,
+                  })
+                }
+                placeholder="Enter product description"
+              />
+            </Field>
+          </FieldGroup>
+          <EditImage
+            editImage={editImage}
+            setEditImage={setEditImage}
+            isPending={isPending}
           />
-          <Button
-            onClick={handleSubmit}
-            disabled={unchanged || isPending}
-            className="cursor-pointer"
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>Save changes</>
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <DialogClose
+              render={
+                <Button
+                  variant="outline"
+                  onClick={handleClose}
+                  className="cursor-pointer"
+                >
+                  Cancel
+                </Button>
+              }
+            />
+            <Button
+              onClick={handleSubmit}
+              disabled={unchanged || isPending}
+              className="cursor-pointer"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>Save changes</>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
