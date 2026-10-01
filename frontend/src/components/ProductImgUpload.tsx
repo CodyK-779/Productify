@@ -1,6 +1,6 @@
 import type { ProductImage } from "@/pages/CreateProductPage";
 import { ImageIcon, XIcon } from "lucide-react";
-import { useRef, type ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 import { toast } from "./ui/toast";
 
 interface Props {
@@ -10,7 +10,6 @@ interface Props {
 }
 
 const ProductImgUpload = ({ image, setImage, isPending }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const VALID_TYPES = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +28,7 @@ const ProductImgUpload = ({ image, setImage, isPending }: Props) => {
     if (!VALID_TYPES.includes(file.type)) {
       toast.add({
         type: "info",
-        description: "Please select valid image (JPEG, PNG, WEBP, GIF)",
+        description: "Please select valid image (JPEG, PNG, WEBP)",
       });
       e.target.value = "";
       return;
@@ -47,7 +46,6 @@ const ProductImgUpload = ({ image, setImage, isPending }: Props) => {
       if (prev.file) URL.revokeObjectURL(prev.preview);
       return { file: null, preview: "" };
     });
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   return (
@@ -78,7 +76,6 @@ const ProductImgUpload = ({ image, setImage, isPending }: Props) => {
           name="product-image"
           type="file"
           accept="image/*"
-          ref={inputRef}
           className="hidden"
           onChange={handleFileUpload}
           disabled={isPending || image.file !== null}

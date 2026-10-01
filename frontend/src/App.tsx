@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
 import CreateProductPage from "./pages/CreateProductPage";
-import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import AppLayout from "./layouts/AppLayout";
@@ -17,7 +16,6 @@ const App = () => {
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/create" element={<CreateProductPage />} />
-        <Route path="/edit/:id" element={<EditProductPage />} />
       </Route>
 
       <Route element={<AuthLayout />}>

@@ -1,5 +1,6 @@
 import CommentSection from "@/components/CommentSection";
 import DeleteProduct from "@/components/DeleteProductWrapper";
+import EditProduct from "@/components/EditProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGetProductById } from "@/hooks/useProducts";
 import { useSession } from "@/lib/auth-client";
@@ -11,11 +12,13 @@ import {
   Trash2Icon,
   UserIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { useParams, Link } from "react-router";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const { data: session } = useSession();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const { data: product, error, isPending } = useGetProductById(id!);
 
@@ -44,12 +47,18 @@ const ProductDetailsPage = () => {
         </Link>
         {isOwner && (
           <div className="flex gap-2">
-            <Link
-              to={`/edit/${product.id}`}
+            <button
               className="btn btn-ghost btn-sm gap-1"
+              onClick={() => setOpenDialog(true)}
             >
               <EditIcon className="size-4" /> Edit
-            </Link>
+            </button>
+            <EditProduct
+              open={openDialog}
+              setOpen={setOpenDialog}
+              product={product}
+            />
+
             <DeleteProduct productId={product.id} path="/">
               <button className="btn btn-error btn-sm gap-1">
                 <Trash2Icon className="size-4" />
