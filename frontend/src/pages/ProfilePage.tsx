@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import DeleteProductWrapper from "@/components/DeleteProductWrapper";
 import { Img } from "@page-speed/img";
+import EditProduct from "@/components/EditProduct";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -65,12 +66,11 @@ const ProfilePage = () => {
                   >
                     <EyeIcon className="size-3" /> View
                   </button>
-                  <button
-                    onClick={() => navigate(`/edit/${product.id}`)}
-                    className="btn btn-ghost btn-xs gap-1"
-                  >
-                    <EditIcon className="size-3" /> Edit
-                  </button>
+                  <EditProduct product={product}>
+                    <button className="btn btn-ghost btn-xs gap-1">
+                      <EditIcon className="size-3" /> Edit
+                    </button>
+                  </EditProduct>
                   <DeleteProductWrapper productId={product.id} path="/profile">
                     <button className="btn btn-ghost btn-xs text-error gap-1">
                       <Trash2Icon className="size-3" /> Delete

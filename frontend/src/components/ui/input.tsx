@@ -1,6 +1,6 @@
-import * as React from "react"
-import { Input as InputPrimitive } from "@base-ui/react/input"
-import { cn } from "cn"
+import * as React from "react";
+import { Input as InputPrimitive } from "@base-ui/react/input";
+import { cn } from "cn";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
@@ -8,12 +8,28 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       type={type}
       data-slot="input"
       className={cn(
-        "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className
+        // 1. Base Layout & Typography
+        "flex h-9 w-full min-w-0 rounded-md px-3 py-1 text-sm transition-colors outline-none md:text-sm",
+
+        // 2. Colors (Using daisyUI base variables directly)
+        "bg-base-200/50 text-base-content", // Slightly tinted background, readable text
+        "border border-base-content/20", // Subtle border that works in dark/light mode
+
+        // 3. Placeholder & Focus States
+        "placeholder:text-base-content/50", // Muted placeholder text
+        "focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary", // Clean focus ring
+
+        // 4. Disabled States
+        "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-base-200",
+
+        // 5. File Input Styling
+        "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-base-content",
+
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

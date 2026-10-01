@@ -11,12 +11,16 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!
 });
 
-/**
- * Uploads an image buffer to the productify_products folder in Cloudinary.
- * @param file - Multer image file, limited to 5 MiB and JPG, PNG, or WebP format.
- * @returns The uploaded image's secure URL and public ID.
- * @throws If the file is missing, fails validation, or cannot be uploaded.
- */
+export function buildImageUrl(publicId: string): string | null {
+  if (!publicId) return null;
+
+  return cloudinary.url(publicId, {
+    secure: true,
+    fetch_format: "auto",
+    quality: "auto"
+  });
+};
+
 export async function uploadProductImage(file: Express.Multer.File): Promise<CloudinaryResponse> {
   try {
     if (!file) throw new Error("No file provided");
@@ -44,12 +48,6 @@ export async function uploadProductImage(file: Express.Multer.File): Promise<Clo
   }
 }
 
-/**
- * Requests deletion of a product image from Cloudinary.
- * @param publicId - Cloudinary public ID of the image to delete.
- * @returns A promise that resolves when the deletion request completes.
- * @throws If the public ID is empty or Cloudinary rejects the request.
- */
 export async function deleteProductImage(publicId: string) {
   try {
     if (!publicId) throw new Error("No publicId provided");

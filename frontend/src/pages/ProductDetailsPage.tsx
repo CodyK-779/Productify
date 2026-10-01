@@ -1,5 +1,6 @@
 import CommentSection from "@/components/CommentSection";
 import DeleteProduct from "@/components/DeleteProductWrapper";
+import EditProduct from "@/components/EditProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGetProductById } from "@/hooks/useProducts";
 import { useSession } from "@/lib/auth-client";
@@ -44,12 +45,12 @@ const ProductDetailsPage = () => {
         </Link>
         {isOwner && (
           <div className="flex gap-2">
-            <Link
-              to={`/edit/${product.id}`}
-              className="btn btn-ghost btn-sm gap-1"
-            >
-              <EditIcon className="size-4" /> Edit
-            </Link>
+            <EditProduct product={product}>
+              <button className="btn btn-ghost btn-sm gap-1">
+                <EditIcon className="size-4" /> Edit
+              </button>
+            </EditProduct>
+
             <DeleteProduct productId={product.id} path="/">
               <button className="btn btn-error btn-sm gap-1">
                 <Trash2Icon className="size-4" />
