@@ -33,6 +33,8 @@ app.use("/api/users", userRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/comments", commentRoutes)
 
-app.listen(Number(ENV.PORT), '0.0.0.0', () => {
-  console.log(`Server is running on port ${ENV.PORT}`);
+const PORT = Number(ENV.PORT) || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
