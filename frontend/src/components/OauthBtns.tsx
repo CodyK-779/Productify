@@ -18,7 +18,7 @@ const OauthBtns = ({ provider, method }: Props) => {
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: "http://localhost:5173",
+        callbackURL: import.meta.env.VITE_FRONTEND_URL,
         fetchOptions: {
           onRequest: () => setLoading(true),
           onError: (cxt) => {
